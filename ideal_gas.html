@@ -1,0 +1,521 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://s3.amazonaws.com/glowscript/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://s3.amazonaws.com/glowscript/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://s3.amazonaws.com/glowscript/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://s3.amazonaws.com/glowscript/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://s3.amazonaws.com/glowscript/package/glow.3.0.min.js"></script>
+<script type="text/javascript" src="https://s3.amazonaws.com/glowscript/package/RSrun.3.0.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var RS_modules = {};
+RS_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = RS_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var RS_Iter0 = string_funcs;
+        RS_Iter0 = ((typeof RS_Iter0[Symbol.iterator] === "function") ? (RS_Iter0 instanceof Map ? RS_Iter0.keys() : RS_Iter0) : Object.keys(RS_Iter0));
+        for (var RS_Index0 of RS_Iter0) {
+            name = RS_Index0;
+            (RS_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? RS_expr_temp.length + name : name] = (RS_expr_temp = RS_str.prototype)[(typeof name === "number" && name < 0) ? RS_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    RS_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+
+    var version, display, vector, print, arange, __name__, type, scene, RS_ls, win, Natoms, NA, L, V, gray, mass, Ratom, k, T, dt, animation, s, d, r, boxbottom, boxtop, vert1, vert2, vert3, vert4, Atoms, p, apos, mfp, pavg, x, y, z, theta, phi, px, py, pz, i, deltav, nhisto, histo, xmax, ymax, gg, theory, dv, v, accum, vdist, nc, gmfp, cnts, ti, tiref, gti, t, ncoll, aposold, dist, v_square, vi, P, hitlist, j, ptot, posi, posj, vj, vrel, a, rrel, dx, dy, value, alpha, deltat, mtot, pcmi, pcmj, ij, sigma, gmfp0, MFP, Zco, z0, loc, nsteps;
+    version = RS_list_decorate([ "3.0", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    display = canvas;
+    vector = vec;
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    scene = canvas();
+    var strings = RS_modules.pythonize.strings;
+
+    strings();
+    "5";
+    win = 500;
+    "7";
+    Natoms = 200;
+    "8";
+    NA = 6.022e23;
+    "10";
+    L = 1;
+    "11";
+    V = GS_power(L, 3);
+    "12";
+    gray = (await color.gray(.7));
+    "13";
+    mass = .004["/"](NA);
+    "14";
+    Ratom = .03;
+    "15";
+    k = 1.38064852e-23;
+    "16";
+    T = float(input("Temperature of the simulation(K): "));
+    "17";
+    dt = 1e-5;
+    "19";
+    animation = RS_interpolate_kwargs.call(this, canvas, [RS_desugar_kwargs({width: win, height: win, align: "left"})]);
+    "20";
+    animation.range = L;
+    "21";
+    animation.title = "Simulation with "["+"](str(Natoms))["+"](" \"hard-sphere\" gas particles at T = ")["+"](str(T))["+"](" K");
+    "38";
+    s = "<b>Theoretical and simulated speed distributions.<\/b>\n  Initially all atoms have the same speed, \n  but collisions change the speeds of the \n  colliding atoms. \n  \n  One of the atoms is marked and leaves a \n  trail so you can follow its path.\n  \n  While speeds are realistic, the collision\n  frequency and mean free path are not\n  \n  The rows below print the simulation time,\n  the collision freq obtained from the simulation,\n  the collision freq calculated with KMT,\n  the mean free path obtained from the simulations,\n  and the mean free path calculated with KMT\n";
+    "39";
+    animation.caption = s;
+    "41";
+    d = L["/"](2)["+"](Ratom);
+    "42";
+    r = .005;
+    "43";
+    boxbottom = RS_interpolate_kwargs.call(this, curve, [RS_desugar_kwargs({color: gray, radius: r})]);
+    "44";
+    boxbottom.append(RS_list_decorate([ vector(d["-u"](), d["-u"](), d["-u"]()), vector(d["-u"](), d["-u"](), d), vector(d, d["-u"](), d), vector(d, d["-u"](), d["-u"]()), vector(d["-u"](), d["-u"](), d["-u"]()) ]));
+    "45";
+    boxtop = RS_interpolate_kwargs.call(this, curve, [RS_desugar_kwargs({color: gray, radius: r})]);
+    "46";
+    boxtop.append(RS_list_decorate([ vector(d["-u"](), d, d["-u"]()), vector(d["-u"](), d, d), vector(d, d, d), vector(d, d, d["-u"]()), vector(d["-u"](), d, d["-u"]()) ]));
+    "47";
+    vert1 = RS_interpolate_kwargs.call(this, curve, [RS_desugar_kwargs({color: gray, radius: r})]);
+    "48";
+    vert2 = RS_interpolate_kwargs.call(this, curve, [RS_desugar_kwargs({color: gray, radius: r})]);
+    "49";
+    vert3 = RS_interpolate_kwargs.call(this, curve, [RS_desugar_kwargs({color: gray, radius: r})]);
+    "50";
+    vert4 = RS_interpolate_kwargs.call(this, curve, [RS_desugar_kwargs({color: gray, radius: r})]);
+    "51";
+    vert1.append(RS_list_decorate([ vector(d["-u"](), d["-u"](), d["-u"]()), vector(d["-u"](), d, d["-u"]()) ]));
+    "52";
+    vert2.append(RS_list_decorate([ vector(d["-u"](), d["-u"](), d), vector(d["-u"](), d, d) ]));
+    "53";
+    vert3.append(RS_list_decorate([ vector(d, d["-u"](), d), vector(d, d, d) ]));
+    "54";
+    vert4.append(RS_list_decorate([ vector(d, d["-u"](), d["-u"]()), vector(d, d, d["-u"]()) ]));
+    "56";
+    Atoms = RS_list_decorate([]);
+    "57";
+    p = RS_list_decorate([]);
+    "58";
+    apos = RS_list_decorate([]);
+    "59";
+    mfp = RS_list_decorate([ 0 ])["*"](Natoms);
+    "60";
+    pavg = sqrt(2["*"](mass)["*"](1.5)["*"](k)["*"](T));
+    "62";
+    for (var RS_Index1 = 0; RS_Index1["<"](Natoms); RS_Index1++) {
+        i = RS_Index1;
+        "63";
+        x = L["*"](random())["-"](L["/"](2));
+        "64";
+        y = L["*"](random())["-"](L["/"](2));
+        "65";
+        z = L["*"](random())["-"](L["/"](2));
+        "66";
+        if ((i === 0 || typeof i === "object" && RS_equals(i, 0))) {
+            "67";
+            Atoms.append(RS_interpolate_kwargs.call(this, sphere, [RS_desugar_kwargs({pos: vector(x, y, z), radius: Ratom, color: color.cyan, make_trail: true, retain: 100, trail_radius: .3["*"](Ratom)})]));
+            "68";
+        } else {
+            Atoms.append(RS_interpolate_kwargs.call(this, sphere, [RS_desugar_kwargs({pos: vector(x, y, z), radius: Ratom, color: gray})]));
+        }
+        "69";
+        apos.append(vec(x, y, z));
+        "70";
+        theta = pi["*"](random());
+        "71";
+        phi = 2["*"](pi)["*"](random());
+        "72";
+        px = pavg["*"](sin(theta))["*"](cos(phi));
+        "73";
+        py = pavg["*"](sin(theta))["*"](sin(phi));
+        "74";
+        pz = pavg["*"](cos(theta));
+        "75";
+        p.append(vector(px, py, pz));
+    }
+    "77";
+    deltav = 100;
+    "79";
+    async function barx(v) {
+        "80";
+        return int(v["/"](deltav));
+    };
+    if (!barx.__argnames__) Object.defineProperties(barx, {
+        __argnames__ : {value: ["v"]},
+        __module__ : {value: null}
+    });
+
+    "83";
+    nhisto = int(5e3["/"](deltav));
+    "85";
+    histo = RS_list_decorate([]);
+    "86";
+    for (var RS_Index2 = 0; RS_Index2["<"](nhisto); RS_Index2++) {
+        i = RS_Index2;
+        histo.append(0);
+    }
+    "87";
+    histo[RS_bound_index((await barx(pavg["/"](mass))), histo)] = Natoms;
+    "89";
+    xmax = sqrt(2["*"](k)["*"](T)["/"](mass))["+"](2.5["*"](sqrt(k["*"](T)["/"](mass))));
+    "90";
+    ymax = Natoms["*"](4)["*"](GS_power((mass["/"](2["*"](pi)["*"](k)["*"](T))), .5))["/"](exp(1))["*"](deltav)["*"](1.2);
+    "91";
+    gg = RS_interpolate_kwargs.call(this, graph, [RS_desugar_kwargs({width: win, height: .4["*"](win), xmax: xmax, align: "left", xtitle: "speed, m/s", ytitle: "Number of atoms", ymax: ymax})]);
+    "94";
+    theory = RS_interpolate_kwargs.call(this, gcurve, [RS_desugar_kwargs({color: color.blue})]);
+    "95";
+    dv = 10;
+    "96";
+    var RS_Iter3 = range(0, 5001["+"](dv), dv);
+    RS_Iter3 = ((typeof RS_Iter3[Symbol.iterator] === "function") ? (RS_Iter3 instanceof Map ? RS_Iter3.keys() : RS_Iter3) : Object.keys(RS_Iter3));
+    for (var RS_Index3 of RS_Iter3) {
+        v = RS_Index3;
+        "97";
+        (await theory.plot(v, deltav["/"](dv)["*"](Natoms)["*"](4)["*"](pi)["*"](GS_power((mass["/"](2["*"](pi)["*"](k)["*"](T))), 1.5))["*"](exp(.5["-u"]()["*"](mass)["*"](GS_power(v, 2))["/"](k["*"](T))))["*"](GS_power(v, 2))["*"](dv)));
+    }
+    "99";
+    accum = RS_list_decorate([]);
+    "101";
+    var RS_Iter4 = range(int(5e3["/"](deltav)));
+    RS_Iter4 = ((typeof RS_Iter4[Symbol.iterator] === "function") ? (RS_Iter4 instanceof Map ? RS_Iter4.keys() : RS_Iter4) : Object.keys(RS_Iter4));
+    for (var RS_Index4 of RS_Iter4) {
+        i = RS_Index4;
+        accum.append(RS_list_decorate([ deltav["*"](i["+"](.5)), 0 ]));
+    }
+    "102";
+    vdist = RS_interpolate_kwargs.call(this, gvbars, [RS_desugar_kwargs({color: color.red, delta: deltav})]);
+    "104";
+    async function interchange(v1, v2) {
+        var RS_ls, barx1, barx2;
+        "105";
+        barx1 = (await barx(v1));
+        "106";
+        barx2 = (await barx(v2));
+        "107";
+        if ((barx1 === barx2 || typeof barx1 === "object" && RS_equals(barx1, barx2))) {
+            return;
+        }
+        "108";
+        if (barx1[">="](len(histo)) || barx2[">="](len(histo))) {
+            return;
+        }
+        "109";
+        histo[(typeof barx1 === "number" && barx1["<"](0)) ? histo.length["+"](barx1) : barx1]=histo[(typeof barx1 === "number" && barx1["<"](0)) ? histo.length["+"](barx1) : barx1]["-"](1);
+        "110";
+        histo[(typeof barx2 === "number" && barx2["<"](0)) ? histo.length["+"](barx2) : barx2]=histo[(typeof barx2 === "number" && barx2["<"](0)) ? histo.length["+"](barx2) : barx2]["+"](1);
+    };
+    if (!interchange.__argnames__) Object.defineProperties(interchange, {
+        __argnames__ : {value: ["v1", "v2"]},
+        __module__ : {value: null}
+    });
+
+    "112";
+    async function checkCollisions() {
+        var RS_ls, hitlist, r2, ai, aj, dr, j, i;
+        "113";
+        hitlist = RS_list_decorate([]);
+        "114";
+        r2 = 2["*"](Ratom);
+        "115";
+        r2=r2["*"](r2);
+        "117";
+        for (var RS_Index5 = 0; RS_Index5["<"](Natoms); RS_Index5++) {
+            i = RS_Index5;
+            "118";
+            ai = apos[(typeof i === "number" && i["<"](0)) ? apos.length["+"](i) : i];
+            "119";
+            for (var RS_Index6 = 0; RS_Index6["<"](i); RS_Index6++) {
+                j = RS_Index6;
+                "120";
+                aj = apos[(typeof j === "number" && j["<"](0)) ? apos.length["+"](j) : j];
+                "121";
+                dr = ai["-"](aj);
+                "123";
+                if (mag2(dr)["<"](r2)) {
+                    hitlist.append(RS_list_decorate([ i, j ]));
+                }
+            }
+        }
+        "125";
+        return hitlist;
+    };
+    if (!checkCollisions.__module__) Object.defineProperties(checkCollisions, {
+        __module__ : {value: null}
+    });
+
+    "127";
+    nhisto = 0;
+    "128";
+    z = 0;
+    "129";
+    nc = 0;
+    "130";
+    gmfp = RS_list_decorate([ 0 ])["*"](Natoms);
+    "131";
+    cnts = RS_list_decorate([ 0 ])["*"](Natoms);
+    "132";
+    ti = RS_list_decorate([ 0 ])["*"](Natoms);
+    "133";
+    tiref = RS_list_decorate([ 0 ])["*"](Natoms);
+    "134";
+    gti = RS_list_decorate([ 0 ])["*"](Natoms);
+    "135";
+    t = 0;
+    "136";
+    ncoll = 0;
+    "138";
+    for (var RS_Index7 = 0; RS_Index7["<"](5e4); RS_Index7++) {
+        nsteps = RS_Index7;
+        "139";
+        (await rate(300));
+        "141";
+        var RS_Iter8 = range(len(accum));
+        RS_Iter8 = ((typeof RS_Iter8[Symbol.iterator] === "function") ? (RS_Iter8 instanceof Map ? RS_Iter8.keys() : RS_Iter8) : Object.keys(RS_Iter8));
+        for (var RS_Index8 of RS_Iter8) {
+            i = RS_Index8;
+            accum[(typeof i === "number" && i["<"](0)) ? accum.length["+"](i) : i][1] = nhisto["*"](accum[(typeof i === "number" && i["<"](0)) ? accum.length["+"](i) : i][1])["+"](histo[(typeof i === "number" && i["<"](0)) ? histo.length["+"](i) : i])["/"](nhisto["+"](1));
+        }
+        "142";
+        if (RS_equals(nhisto["%"](10), 0)) {
+            "143";
+            vdist.data = accum;
+        }
+        "144";
+        nhisto=nhisto["+"](1);
+        "147";
+        t = t["+"](dt);
+        "148";
+        for (var RS_Index9 = 0; RS_Index9["<"](Natoms); RS_Index9++) {
+            i = RS_Index9;
+            "149";
+            aposold = apos[(typeof i === "number" && i["<"](0)) ? apos.length["+"](i) : i];
+            "150";
+            Atoms[(typeof i === "number" && i["<"](0)) ? Atoms.length["+"](i) : i].pos = apos[(typeof i === "number" && i["<"](0)) ? apos.length["+"](i) : i] = apos[(typeof i === "number" && i["<"](0)) ? apos.length["+"](i) : i]["+"](p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i]["/"](mass)["*"](dt));
+            "151";
+            ti[(typeof i === "number" && i["<"](0)) ? ti.length["+"](i) : i] = t["-"](tiref[(typeof i === "number" && i["<"](0)) ? tiref.length["+"](i) : i]);
+            "153";
+            dist = GS_power((GS_power((apos[(typeof i === "number" && i["<"](0)) ? apos.length["+"](i) : i].x["-"](aposold.x)), 2)["+"](GS_power((apos[(typeof i === "number" && i["<"](0)) ? apos.length["+"](i) : i].y["-"](aposold.y)), 2))["+"](GS_power((apos[(typeof i === "number" && i["<"](0)) ? apos.length["+"](i) : i].z["-"](aposold.z)), 2))), .5);
+            "154";
+            mfp[(typeof i === "number" && i["<"](0)) ? mfp.length["+"](i) : i] = mfp[(typeof i === "number" && i["<"](0)) ? mfp.length["+"](i) : i]["+"](dist);
+        }
+        "156";
+        v_square = 0;
+        "157";
+        for (var RS_Index10 = 0; RS_Index10["<"](Natoms); RS_Index10++) {
+            i = RS_Index10;
+            "158";
+            vi = p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i]["/"](mass);
+            "159";
+            v_square = v_square["+"](vi.x["*"](vi.x))["+"](vi.y["*"](vi.y))["+"](vi.z["*"](vi.z));
+        }
+        "161";
+        P = mass["*"](v_square)["/"](3)["/"](V);
+        "165";
+        hitlist = (await checkCollisions());
+        "170";
+        var RS_Iter11 = hitlist;
+        RS_Iter11 = ((typeof RS_Iter11[Symbol.iterator] === "function") ? (RS_Iter11 instanceof Map ? RS_Iter11.keys() : RS_Iter11) : Object.keys(RS_Iter11));
+        for (var RS_Index11 of RS_Iter11) {
+            ij = RS_Index11;
+            "171";
+            i = ij[0];
+            "172";
+            j = ij[1];
+            "173";
+            gmfp[(typeof i === "number" && i["<"](0)) ? gmfp.length["+"](i) : i]=gmfp[(typeof i === "number" && i["<"](0)) ? gmfp.length["+"](i) : i]["+"](mfp[(typeof i === "number" && i["<"](0)) ? mfp.length["+"](i) : i]);
+            "174";
+            gmfp[(typeof j === "number" && j["<"](0)) ? gmfp.length["+"](j) : j]=gmfp[(typeof j === "number" && j["<"](0)) ? gmfp.length["+"](j) : j]["+"](mfp[(typeof j === "number" && j["<"](0)) ? mfp.length["+"](j) : j]);
+            "175";
+            gti[(typeof i === "number" && i["<"](0)) ? gti.length["+"](i) : i]=gti[(typeof i === "number" && i["<"](0)) ? gti.length["+"](i) : i]["+"](ti[(typeof i === "number" && i["<"](0)) ? ti.length["+"](i) : i]);
+            "176";
+            gti[(typeof j === "number" && j["<"](0)) ? gti.length["+"](j) : j]=gti[(typeof j === "number" && j["<"](0)) ? gti.length["+"](j) : j]["+"](ti[(typeof j === "number" && j["<"](0)) ? ti.length["+"](j) : j]);
+            "177";
+            cnts[(typeof i === "number" && i["<"](0)) ? cnts.length["+"](i) : i]=cnts[(typeof i === "number" && i["<"](0)) ? cnts.length["+"](i) : i]["+"](1);
+            "178";
+            cnts[(typeof j === "number" && j["<"](0)) ? cnts.length["+"](j) : j]=cnts[(typeof j === "number" && j["<"](0)) ? cnts.length["+"](j) : j]["+"](1);
+            "179";
+            mfp[(typeof i === "number" && i["<"](0)) ? mfp.length["+"](i) : i] = 0;
+            "180";
+            mfp[(typeof j === "number" && j["<"](0)) ? mfp.length["+"](j) : j] = 0;
+            "181";
+            tiref[(typeof i === "number" && i["<"](0)) ? tiref.length["+"](i) : i] = t;
+            "182";
+            tiref[(typeof j === "number" && j["<"](0)) ? tiref.length["+"](j) : j] = t;
+            "183";
+            ptot = p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i]["+"](p[(typeof j === "number" && j["<"](0)) ? p.length["+"](j) : j]);
+            "184";
+            posi = apos[(typeof i === "number" && i["<"](0)) ? apos.length["+"](i) : i];
+            "185";
+            posj = apos[(typeof j === "number" && j["<"](0)) ? apos.length["+"](j) : j];
+            "186";
+            vi = p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i]["/"](mass);
+            "187";
+            vj = p[(typeof j === "number" && j["<"](0)) ? p.length["+"](j) : j]["/"](mass);
+            "188";
+            vrel = vj["-"](vi);
+            "189";
+            a = vrel.mag2;
+            "190";
+            if ((a === 0 || typeof a === "object" && RS_equals(a, 0))) {
+                continue;
+            }
+            "191";
+            rrel = posi["-"](posj);
+            "192";
+            if (rrel.mag["<"](Ratom)) {
+                "194";
+                continue;
+            }
+            "197";
+            dx = dot(rrel, vrel.hat);
+            "198";
+            dy = cross(rrel, vrel.hat).mag;
+            "201";
+            value = dy["/"](2["*"](Ratom));
+            "202";
+            if (value[">"](1)) {
+                value = 1;
+            }
+            "203";
+            if (value["<"](1["-u"]())) {
+                value = 1["-u"]();
+            }
+            "204";
+            alpha = asin(value);
+            "205";
+            d = 2["*"](Ratom)["*"](cos(alpha))["-"](dx);
+            "206";
+            deltat = d["/"](vrel.mag);
+            "210";
+            posi = posi["-"](vi["*"](deltat));
+            "211";
+            posj = posj["-"](vj["*"](deltat));
+            "213";
+            mtot = 2["*"](mass);
+            "214";
+            pcmi = p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i]["-"](ptot["*"](mass)["/"](mtot));
+            "215";
+            pcmj = p[(typeof j === "number" && j["<"](0)) ? p.length["+"](j) : j]["-"](ptot["*"](mass)["/"](mtot));
+            "216";
+            rrel = norm(rrel);
+            "217";
+            pcmi = pcmi["-"](2["*"]((await pcmi.dot(rrel)))["*"](rrel));
+            "218";
+            pcmj = pcmj["-"](2["*"]((await pcmj.dot(rrel)))["*"](rrel));
+            "219";
+            p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i] = pcmi["+"](ptot["*"](mass)["/"](mtot));
+            "220";
+            p[(typeof j === "number" && j["<"](0)) ? p.length["+"](j) : j] = pcmj["+"](ptot["*"](mass)["/"](mtot));
+            "221";
+            apos[(typeof i === "number" && i["<"](0)) ? apos.length["+"](i) : i] = posi["+"](p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i]["/"](mass)["*"](deltat));
+            "222";
+            apos[(typeof j === "number" && j["<"](0)) ? apos.length["+"](j) : j] = posj["+"](p[(typeof j === "number" && j["<"](0)) ? p.length["+"](j) : j]["/"](mass)["*"](deltat));
+            "223";
+            (await interchange(vi.mag, p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i].mag["/"](mass)));
+            "224";
+            (await interchange(vj.mag, p[(typeof j === "number" && j["<"](0)) ? p.length["+"](j) : j].mag["/"](mass)));
+        }
+        "225";
+        ncoll=ncoll["+"](len(hitlist));
+        "226";
+        sigma = pi["*"](GS_power((2["*"](Ratom)), 2));
+        "227";
+        gmfp0 = k["*"](T)["/"](P)["/"](sigma["*"](GS_power(2, .5)));
+        "228";
+        MFP = 0;
+        "229";
+        Zco = 0;
+        "230";
+        for (var RS_Index12 = 0; RS_Index12["<"](Natoms); RS_Index12++) {
+            i = RS_Index12;
+            "231";
+            if (cnts[(typeof i === "number" && i["<"](0)) ? cnts.length["+"](i) : i][">"](0)) {
+                "232";
+                MFP=MFP["+"](gmfp[(typeof i === "number" && i["<"](0)) ? gmfp.length["+"](i) : i]["/"](cnts[(typeof i === "number" && i["<"](0)) ? cnts.length["+"](i) : i]));
+                "233";
+                Zco=Zco["+"](cnts[(typeof i === "number" && i["<"](0)) ? cnts.length["+"](i) : i]["/"](gti[(typeof i === "number" && i["<"](0)) ? gti.length["+"](i) : i]));
+            }
+        }
+        "235";
+        z0 = Natoms["/"](V)["*"](sigma)["*"](sqrt(2))["*"](sqrt(8["*"](k)["*"](T)["/"](pi)["/"](mass)));
+        "236";
+        if (RS_equals(nsteps["%"](1e3), 0)) {
+            print(t, ncoll["/"](t)["/"](Natoms)["*"](2), z0, MFP["/"](Natoms), gmfp0);
+        }
+        "238";
+        for (var RS_Index13 = 0; RS_Index13["<"](Natoms); RS_Index13++) {
+            i = RS_Index13;
+            "239";
+            loc = apos[(typeof i === "number" && i["<"](0)) ? apos.length["+"](i) : i];
+            "240";
+            if (abs(loc.x)[">"](L["/"](2))) {
+                "241";
+                if (loc.x["<"](0)) {
+                    p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i].x = abs(p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i].x);
+                } else {
+                    p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i].x = abs(p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i].x)["-u"]();
+                }
+                "244";
+            }
+            if (abs(loc.y)[">"](L["/"](2))) {
+                "245";
+                if (loc.y["<"](0)) {
+                    p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i].y = abs(p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i].y);
+                } else {
+                    p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i].y = abs(p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i].y)["-u"]();
+                }
+                "248";
+            }
+            if (abs(loc.z)[">"](L["/"](2))) {
+                "249";
+                if (loc.z["<"](0)) {
+                    p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i].z = abs(p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i].z);
+                } else {
+                    p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i].z = abs(p[(typeof i === "number" && i["<"](0)) ? p.length["+"](i) : i].z)["-u"]();
+                }
+            }
+        }
+    }
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>

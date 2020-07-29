@@ -4,13 +4,13 @@ Here you will find useful jupyter notebooks on this subject.
 
 Access this Binder at the following URLs 
 
-Classical Notebook:
+Jupyter Notebook:
 https://mybinder.org/v2/gh/emartineznunez/QF_IV/master
 
-Lab:
+Jupyter Lab:
 https://mybinder.org/v2/gh/emartineznunez/QF_IV/master?urlpath=lab
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/emartineznunez/QF_IV/master)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/emartineznunez/QF_IV/master?urlpath=lab)
 
 ## AUTHORS
 

@@ -10,6 +10,8 @@ https://mybinder.org/v2/gh/emartineznunez/QF_IV/master
 Lab:
 https://mybinder.org/v2/gh/emartineznunez/QF_IV/master?urlpath=lab
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/emartineznunez/QF_IV/master)
+
 ## AUTHORS
 
 * Emilio Martinez-Nunez

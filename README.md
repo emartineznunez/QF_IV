@@ -8,4 +8,4 @@ Choose your favorite user interface:
 
 
 
-**Diffusion equation**    [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/emartineznunez/QF_IV/blob/master/Difusion.ipynb)
+**Diffusion equation:**    [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/emartineznunez/QF_IV/blob/master/Difusion.ipynb)
